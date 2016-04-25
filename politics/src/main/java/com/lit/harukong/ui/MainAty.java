@@ -30,7 +30,6 @@ public class MainAty extends AppCompatActivity
     private SharedPreferences sp;
     private Intent intent = new Intent();
     private String mLoginName;
-    private TextView header_login_ID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +40,6 @@ public class MainAty extends AppCompatActivity
 
         sp = getSharedPreferences("PoliticsInfo", Activity.MODE_PRIVATE);
         mLoginName = sp.getString("mLogin", "");
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,14 +66,19 @@ public class MainAty extends AppCompatActivity
 
         View headerView = navigationView.getHeaderView(0);
         ImageView headerImage = (ImageView) headerView.findViewById(R.id.header_imageView);
-        TextView headerTextView = (TextView) headerView.findViewById(R.id.header_login_ID);
+        final TextView headerTextView = (TextView) headerView.findViewById(R.id.header_login_ID);
         TextView exitApp = (TextView) findViewById(R.id.nav_exit_to_app);
-        TextView header_login_ID = (TextView) findViewById(R.id.header_login_ID);
         headerImage.setOnClickListener(this);
         headerTextView.setOnClickListener(this);
         exitApp.setOnClickListener(this);
 
-//        header_login_ID.setText(mLoginName);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                headerTextView.setText(mLoginName);
+                headerTextView.setTextSize(18);
+            }
+        });
     }
 
 
@@ -147,7 +150,7 @@ public class MainAty extends AppCompatActivity
     public void statisticsPolitics() {
         if (!mLoginName.equals("admin")) {
             ToastUtil.showToast(getApplicationContext(), "您所在的用户组没有权限使用统计功能!");
-        }else{
+        } else {
             ToastUtil.showToast(getApplicationContext(), "管理员可以使用统计功能，但是工程师还没有写好");
         }
     }

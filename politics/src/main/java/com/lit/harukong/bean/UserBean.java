@@ -1,8 +1,9 @@
 package com.lit.harukong.bean;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class UserBean {
+public class UserBean implements Serializable{
     private int userID;// 唯一标示一个用户，无实际意义
     private String loginID;// 登录名
     private String pwd;// 密码

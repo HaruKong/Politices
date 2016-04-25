@@ -364,13 +364,14 @@ public class NewPoliticsAty extends AppCompatActivity implements View.OnTouchLis
                             sb.append(tc.getName()).append("、");
                         }
                     }
+                    while (sb.charAt(sb.length() - 1) == '、') {
+                        sb.deleteCharAt(sb.length() - 1);
+                    }
                 } else {
 //                    ToastUtil.showToast(getApplicationContext(), "你取消了部门选择！");
                     sb.append("请选择接收部门");
                 }
-                while (sb.charAt(sb.length() - 1) == '、') {
-                    sb.deleteCharAt(sb.length() - 1);
-                }
+
                 etBID.setText(sb.toString());
                 break;
             case AppContext.BRANCH_USER:
@@ -380,14 +381,15 @@ public class NewPoliticsAty extends AppCompatActivity implements View.OnTouchLis
                     for (UserBean ub : listForResultU) {
                         sbUser.append("【").append(JudgeUserJob.jobBranch(ub.getUserJob())).
                                 append("】").append(ub.getTel()).append("-").
-                                append(ub.getName()).append("、");
+                                append(ub.getName()).append("\n");
+                    }
+                    while (sbUser.charAt(sbUser.length() - 1) == '\n') {
+                        sbUser.deleteCharAt(sbUser.length() - 1);
                     }
                 } else {
+                    sbUser.append("请选择接收人");
+                }
 
-                }
-                while (sbUser.charAt(sbUser.length() - 1) == '、') {
-                    sbUser.deleteCharAt(sbUser.length() - 1);
-                }
                 etBUsers.setText(sbUser.toString());
                 break;
             default:

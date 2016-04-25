@@ -3,6 +3,7 @@ package com.lit.harukong.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
@@ -19,6 +20,7 @@ import com.lit.harukong.bean.TB_GroupBean;
 import com.lit.harukong.bean.UserBean;
 import com.lit.harukong.util.ToastUtil;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,7 @@ import java.util.List;
 public class BranchUserAty extends Activity {
 
 
+    private Intent intent = new Intent();
     private GridView gridView;
     private TextView btnTv;
     private ExpandableListView expandableListView;
@@ -51,6 +54,12 @@ public class BranchUserAty extends Activity {
         expandableListView.setAdapter(listAdapter);
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        intent.putExtra("returnU", "");
+        setResult(AppContext.BRANCH_USER, intent);
+        return super.onKeyDown(keyCode, event);
+    }
 
     public void setUpViews() {
         gridView = (GridView) findViewById(R.id.user_GridView);
@@ -62,6 +71,14 @@ public class BranchUserAty extends Activity {
         btnTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                intent.putExtra("returnU", "1");
+                if (gridUserList.size() > 0) {
+                    intent.putExtra("gridUserList", (Serializable) gridUserList);
+                    setResult(AppContext.BRANCH_USER, intent);
+                    BranchUserAty.this.finish();
+                } else {
+                    ToastUtil.showToast(getApplicationContext(), "至少要选一个联系人！按返回键退出！");
+                }
             }
         });
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
