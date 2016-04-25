@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".ui.NewPoliticsAty"
+    tools:showIn="@layout/aty_new_politics">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg">
+
+                <EditText
+                    android:id="@+id/et_url"
+                    style="@style/edit_text"
+                    android:hint="访问链接"
+                    android:singleLine="true" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnPaste"
+                    style="@style/btn_skin"
+                    android:layout_weight="1"
+                    android:text="粘贴URL" />
+
+                <Button
+                    android:id="@+id/btnCrawlInfo"
+                    style="@style/btn_skin"
+                    android:layout_weight="1"
+                    android:text="抓取URl" />
+
+                <Button
+                    android:id="@+id/btnDelete"
+                    style="@style/btn_skin"
+                    android:layout_weight="1"
+                    android:text="清空URL" />
+
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg">
+
+                <EditText
+                    android:id="@+id/et_title"
+                    style="@style/edit_text"
+                    android:hint="标题" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg">
+
+                <EditText
+                    android:id="@+id/et_announceTime"
+                    style="@style/edit_text"
+                    android:editable="false"
+                    android:hint="发表时间" />
+
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg">
+
+                <EditText
+                    android:id="@+id/et_findTime"
+                    style="@style/edit_text"
+                    android:editable="false"
+                    android:hint="监测时间" />
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_DateTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/btnModifyDate"
+                    style="@style/btn_skin"
+                    android:layout_weight="1"
+                    android:text="修改日期" />
+
+                <Button
+                    android:id="@+id/btnModifyTime"
+                    style="@style/btn_skin"
+                    android:layout_weight="1"
+                    android:text="修改时间" />
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg">
+
+                <EditText
+                    android:id="@+id/et_webSiteName"
+                    style="@style/edit_text"
+                    android:hint="网站名" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg">
+
+                <EditText
+                    android:id="@+id/et_politicsType"
+                    style="@style/edit_text"
+                    android:editable="false"
+                    android:hint="问政类型" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg">
+
+                <EditText
+                    android:id="@+id/et_bID"
+                    style="@style/edit_text"
+                    android:editable="false"
+                    android:hint="接收部门" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg">
+
+                <EditText
+                    android:id="@+id/et_bUsers"
+                    style="@style/edit_text"
+                    android:editable="false"
+                    android:hint="接收人" />
+            </android.support.design.widget.TextInputLayout>
+
+            <Button
+                android:id="@+id/btnBranch"
+                style="@style/btn_skin"
+                android:text=""
+                android:visibility="gone" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg">
+
+                <EditText
+                    android:id="@+id/et_announceUser"
+                    style="@style/edit_text"
+                    android:hint="发表人" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg">
+
+                <EditText
+                    android:id="@+id/et_Jbr"
+                    style="@style/edit_text"
+                    android:hint="交办人" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg">
+
+                <EditText
+                    android:id="@+id/et_JbrTel"
+                    style="@style/edit_text"
+                    android:hint="交办人联系方式" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg">
+
+                <EditText
+                    android:id="@+id/et_content"
+                    style="@style/edit_text"
+                    android:hint="帖子正文" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

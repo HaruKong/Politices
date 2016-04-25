@@ -1,0 +1,9 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <item name="ic_menu_edit" type="drawable">@drawable/ic_event_2x</item>
+    <item name="ic_menu_note_add" type="drawable">@drawable/ic_note_add_2x</item>
+    <item name="ic_menu_exit_to_app" type="drawable">@drawable/ic_exit_to_app</item>
+    <item name="ic_menu_open_in_browser" type="drawable">@drawable/ic_open_in_browser_2x</item>
+    <item name="ic_menu_settings" type="drawable">@drawable/ic_settings_2x</item>
+    <item name="ic_menu_statics_receipt" type="drawable">@drawable/ic_receipt_2x</item>
+
+</resources>

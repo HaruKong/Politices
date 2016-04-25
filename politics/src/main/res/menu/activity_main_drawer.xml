@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="系统菜单">
+        <menu>
+            <item
+                android:id="@+id/nav_new_politics"
+                android:icon="@drawable/ic_menu_note_add"
+                android:title="@string/title_activity_new_politics" />
+            <item
+                android:id="@+id/nav_statistics_politics"
+                android:icon="@drawable/ic_menu_statics_receipt"
+                android:title="@string/title_activity_static" />
+        </menu>
+    </item>
+
+
+    <item android:title="友情链接">
+        <menu>
+            <item
+                android:id="@+id/nav_sqc_platform"
+                android:icon="@drawable/ic_menu_open_in_browser"
+                android:title="@string/title_activity_sqc_plat_form" />
+
+        </menu>
+    </item>
+
+    <item android:title="其他">
+        <menu>
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_menu_settings"
+                android:title="@string/title_activity_app_settings" />
+            <item
+                android:id="@+id/nav_swap_user"
+                android:icon="@drawable/ic_swap_horiz"
+                android:title="@string/nav_swap_user" />
+        </menu>
+    </item>
+</menu>

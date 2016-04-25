@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ProgressBar
+            android:id="@+id/user_progressBar_branch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:visibility="invisible" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="选择接收人"
+            android:textColor="@color/white"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/user_btnTv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:paddingRight="16dp"
+            android:text="确定"
+            android:textColor="@color/colorBtn"
+            android:textSize="20sp"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
+    <GridView
+        android:id="@+id/user_GridView"
+        android:layout_width="match_parent"
+        android:layout_height="145dp"
+        android:background="@color/gray"
+        android:gravity="fill"
+        android:horizontalSpacing="5dip"
+        android:numColumns="4"
+        android:verticalSpacing="5dip" />
+
+    <ExpandableListView
+        android:id="@+id/user_ExpandListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:cacheColorHint="#00000000"
+        android:childDivider="@color/childDivider"
+        android:choiceMode="multipleChoice"
+        android:divider="@color/divider"
+        android:dividerHeight="1px"
+        android:groupIndicator="@null"
+        android:listSelector="#00000000"
+        android:scrollingCache="false" />
+</LinearLayout>
