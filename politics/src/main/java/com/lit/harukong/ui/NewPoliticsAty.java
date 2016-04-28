@@ -157,7 +157,7 @@ public class NewPoliticsAty extends AppCompatActivity implements View.OnTouchLis
         SharedPreferences sp = getSharedPreferences("PoliticsInfo", Activity.MODE_PRIVATE);
         if (null != userList) {
             for (UserBean u : userList) {
-                if (MD5Util.md5(u.getLoginID()).equals(sp.getString("mLogin", ""))) {
+                if (u.getLoginID().equals(sp.getString("mLogin", ""))) {
                     etJbr.setText(u.getName());
                     etJbrTel.setText(u.getTel());
                     break;

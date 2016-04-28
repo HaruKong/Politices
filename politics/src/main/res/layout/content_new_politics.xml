@@ -194,6 +194,7 @@
                 <EditText
                     android:id="@+id/et_Jbr"
                     style="@style/edit_text"
+                    android:editable="false"
                     android:hint="交办人" />
             </android.support.design.widget.TextInputLayout>
 
@@ -205,6 +206,7 @@
                 <EditText
                     android:id="@+id/et_JbrTel"
                     style="@style/edit_text"
+                    android:editable="false"
                     android:hint="交办人联系方式" />
             </android.support.design.widget.TextInputLayout>
 

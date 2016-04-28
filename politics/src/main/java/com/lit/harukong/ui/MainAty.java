@@ -119,17 +119,18 @@ public class MainAty extends AppCompatActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.header_imageView:
-                Toast.makeText(getApplicationContext(), "点击了头像", Toast.LENGTH_SHORT).show();
+                ToastUtil.showToast(getApplicationContext(), "点击了头像");
                 break;
             case R.id.header_login_ID:
-                Toast.makeText(getApplicationContext(), "点击了登录名", Toast.LENGTH_SHORT).show();
+                ToastUtil.showToast(getApplicationContext(), mLoginName);
                 break;
             /**
              * 退出应用
              */
             case R.id.nav_exit_to_app:
-                Toast.makeText(getApplicationContext(), "点击了退出", Toast.LENGTH_SHORT).show();
-                AppManager.getAppManager().AppExit(this);
+//                Toast.makeText(getApplicationContext(), "点击了退出", Toast.LENGTH_SHORT).show();
+                android.os.Process.killProcess(android.os.Process.myPid());//获取PID
+                System.exit(0);//常规java、c#的标准退出法，返回值为0代表正常退出
                 break;
             default:
                 break;
@@ -167,7 +168,7 @@ public class MainAty extends AppCompatActivity
      * 设置
      */
     public void settings() {
-
+        ToastUtil.showToast(getApplicationContext(), "暂时不知道要做哪些功能，先放一放！");
     }
 
     /**
