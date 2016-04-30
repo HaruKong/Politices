@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TimePicker;
 
+import com.alibaba.fastjson.JSON;
 import com.lit.harukong.AppContext;
 import com.lit.harukong.R;
 import com.lit.harukong.bean.PartPoliticalInfoBean;
@@ -414,7 +415,7 @@ public class NewPoliticsAty extends AppCompatActivity implements View.OnTouchLis
             public void onSuccess(String t) {
                 super.onSuccess(t);
 
-                partPoliticalInfo = AppContext.gson.fromJson(t, PartPoliticalInfoBean.class);
+                partPoliticalInfo = JSON.parseObject(t, PartPoliticalInfoBean.class);
                 if (null == partPoliticalInfo) {
                     ToastUtil.showToast(NewPoliticsAty.this, "没有获取到信息");
                 } else {

@@ -19,59 +19,45 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lit.harukong.AppManager;
+import com.alibaba.fastjson.JSON;
+import com.lit.harukong.AppContext;
 import com.lit.harukong.R;
+import com.lit.harukong.bean.PoliticsByInternetBean;
 import com.lit.harukong.util.ToastUtil;
+
+import org.kymjs.kjframe.http.HttpCallBack;
+
+import java.util.List;
 
 
 public class MainAty extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
+    //    private static final String ARG_COLUMN_COUNT = "column-count";
+    private List<PoliticsByInternetBean> reList;
+//    private int mColumnCount = 1;
+//    private MyRecyclerViewAdapter adapter;
+//    private MyLoadMoreRecyclerView recyclerView;
+//    private SwipeRefreshLayout swipeRefreshLayout;
+//    private int page = 0;
+    protected Toolbar toolbar;
+    protected FloatingActionButton fab;
+    protected DrawerLayout drawer;
+    protected NavigationView navigationView;
+    protected ImageView headerImage;
+    private TextView headerTextView;
+    protected TextView exitApp;
     private SharedPreferences sp;
     private Intent intent = new Intent();
     private String mLoginName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.aty_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        sp = getSharedPreferences("PoliticsInfo", Activity.MODE_PRIVATE);
-        mLoginName = sp.getString("mLogin", "");
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "选择删除问政列表子选项", Snackbar.LENGTH_LONG)
-                        .setAction("确定", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Toast.makeText(getApplicationContext(), "你选择了删除问政",
-                                        Toast.LENGTH_LONG).show();
-                            }
-                        }).show();
-            }
-        });
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        View headerView = navigationView.getHeaderView(0);
-        ImageView headerImage = (ImageView) headerView.findViewById(R.id.header_imageView);
-        final TextView headerTextView = (TextView) headerView.findViewById(R.id.header_login_ID);
-        TextView exitApp = (TextView) findViewById(R.id.nav_exit_to_app);
-        headerImage.setOnClickListener(this);
-        headerTextView.setOnClickListener(this);
-        exitApp.setOnClickListener(this);
-
+        initData();
+        initWidget();
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -79,6 +65,47 @@ public class MainAty extends AppCompatActivity
                 headerTextView.setTextSize(18);
             }
         });
+    }
+
+    public void initData() {
+        sp = getSharedPreferences("PoliticsInfo", Activity.MODE_PRIVATE);
+        mLoginName = sp.getString("mLogin", "");
+        politicsInfo();
+    }
+
+    public void initWidget() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        headerImage = (ImageView) headerView.findViewById(R.id.header_imageView);
+        headerTextView = (TextView) headerView.findViewById(R.id.header_login_ID);
+        exitApp = (TextView) findViewById(R.id.nav_exit_to_app);
+//        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_layout);
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                swipeRefreshLayout.setRefreshing(false);
+//                page = 0;
+//                adapter.setData(reList);
+//                recyclerView.setAutoLoadMoreEnable(false);
+//                adapter.notifyDataSetChanged();
+//            }
+//        });
+//        recyclerView = (MyLoadMoreRecyclerView) findViewById(R.id.re_list);
+//        recyclerView.setHasFixedSize(true);
+        navigationView.setNavigationItemSelectedListener(this);
+        headerImage.setOnClickListener(this);
+        headerTextView.setOnClickListener(this);
+        exitApp.setOnClickListener(this);
+        fab.setOnClickListener(this);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
     }
 
 
@@ -118,6 +145,16 @@ public class MainAty extends AppCompatActivity
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.fab:
+                Snackbar.make(v, "选择删除问政列表子选项", Snackbar.LENGTH_LONG)
+                        .setAction("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(getApplicationContext(), "你选择了删除问政",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        }).show();
+                break;
             case R.id.header_imageView:
                 ToastUtil.showToast(getApplicationContext(), "点击了头像");
                 break;
@@ -135,6 +172,40 @@ public class MainAty extends AppCompatActivity
             default:
                 break;
         }
+    }
+
+    /**
+     * 获取登录账号下的问政信息
+     */
+    public void politicsInfo() {
+        String url = AppContext.url + "ViewPoliticsServlet";
+        AppContext.kjp.put("param0", "getPolitics");
+        AppContext.kjp.put("loginID", mLoginName);
+        AppContext.kjh.post(url, AppContext.kjp, false, new HttpCallBack() {
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                reList = JSON.parseArray(t, PoliticsByInternetBean.class);
+                ToastUtil.showToast(getApplicationContext(), reList.toString());
+//                recyclerView.setLayoutManager(new LinearLayoutManager(MainAty.this));
+//                adapter = new MyRecyclerViewAdapter(reList);
+//                recyclerView.setAutoLoadMoreEnable(true);
+//                recyclerView.setLoadMoreListener(new MyLoadMoreRecyclerView.LoadMoreListener() {
+//                    @Override
+//                    public void onLoadMore() {
+//                        recyclerView.postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                swipeRefreshLayout.setRefreshing(false);
+//                                adapter.addDatas(reList);
+//                                recyclerView.notifyMoreFinish(false);
+//                            }
+//                        }, 1000);
+//                    }
+//                });
+//                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     /**
@@ -194,4 +265,5 @@ public class MainAty extends AppCompatActivity
         });
         builder.show();
     }
+
 }

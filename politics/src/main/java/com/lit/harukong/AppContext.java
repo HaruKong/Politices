@@ -2,8 +2,7 @@ package com.lit.harukong;
 
 import android.app.Application;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.alibaba.fastjson.JSON;
 import com.lit.harukong.bean.UserBean;
 import com.lit.harukong.util.ToastUtil;
 
@@ -18,7 +17,6 @@ import java.util.List;
  * Created by haru on 2016/3/10.
  */
 public class AppContext extends Application {
-    public static final Gson gson = new Gson();
     public static final KJHttp kjh = new KJHttp();
     public static final HttpParams kjp = new HttpParams();
     public static final String url = "http://www.lit402.top:8080/PoliticsService/";
@@ -55,8 +53,7 @@ public class AppContext extends Application {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                userList = gson.fromJson(t, new TypeToken<List<UserBean>>() {
-                }.getType());
+                userList = JSON.parseArray(t, UserBean.class);
             }
 
             @Override

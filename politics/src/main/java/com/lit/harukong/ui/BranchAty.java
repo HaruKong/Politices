@@ -11,7 +11,7 @@ import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.gson.reflect.TypeToken;
+import com.alibaba.fastjson.JSON;
 import com.lit.harukong.AppContext;
 import com.lit.harukong.R;
 import com.lit.harukong.adapter.MyBranchGridAdapter;
@@ -178,8 +178,8 @@ public class BranchAty extends AppCompatActivity {
                 btnTv.setVisibility(View.VISIBLE);
                 if (t_branchList == null) {
                     t_branchList = new ArrayList<>();
-                    t_branchList = AppContext.gson.fromJson(t, new TypeToken<List<TB_GroupBean>>() {
-                    }.getType());
+
+                    t_branchList = JSON.parseArray(t, TB_GroupBean.class);
                     //父级部门
                     listGroup = new ArrayList<>();
                     listChild = new ArrayList<>();

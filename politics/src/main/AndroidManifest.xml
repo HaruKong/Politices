@@ -48,9 +48,6 @@
             android:name=".ui.BranchUserAty"
             android:theme="@style/Theme_dialog" />
         <activity
-            android:name=".demo.BranchAtyDemo"
-            android:theme="@style/Theme_dialog" />
-        <activity
             android:name=".ui.BranchAty"
             android:theme="@style/Theme_dialog" />
     </application>
