@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -15,6 +18,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,23 +28,24 @@ import com.alibaba.fastjson.JSON;
 import com.lit.harukong.AppContext;
 import com.lit.harukong.R;
 import com.lit.harukong.bean.PoliticsByInternetBean;
+import com.lit.harukong.interf.OnRefreshListener;
 import com.lit.harukong.util.ToastUtil;
+import com.lit.harukong.widget.RefreshListView;
 
 import org.kymjs.kjframe.http.HttpCallBack;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class MainAty extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, OnRefreshListener {
 
-    //    private static final String ARG_COLUMN_COUNT = "column-count";
+    private List<String> textList;
+    private MyAdapter adapter;
+    private RefreshListView rListView;
+
     private List<PoliticsByInternetBean> reList;
-//    private int mColumnCount = 1;
-//    private MyRecyclerViewAdapter adapter;
-//    private MyLoadMoreRecyclerView recyclerView;
-//    private SwipeRefreshLayout swipeRefreshLayout;
-//    private int page = 0;
     protected Toolbar toolbar;
     protected FloatingActionButton fab;
     protected DrawerLayout drawer;
@@ -65,6 +71,14 @@ public class MainAty extends AppCompatActivity
                 headerTextView.setTextSize(18);
             }
         });
+        rListView = (RefreshListView) findViewById(R.id.refresh_list);
+        textList = new ArrayList<String>();
+        for (int i = 0; i < 25; i++) {
+            textList.add("这是一条ListView的数据" + i);
+        }
+        adapter = new MyAdapter();
+        rListView.setAdapter(adapter);
+        rListView.setOnRefreshListener(this);
     }
 
     public void initData() {
@@ -83,19 +97,6 @@ public class MainAty extends AppCompatActivity
         headerImage = (ImageView) headerView.findViewById(R.id.header_imageView);
         headerTextView = (TextView) headerView.findViewById(R.id.header_login_ID);
         exitApp = (TextView) findViewById(R.id.nav_exit_to_app);
-//        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_layout);
-//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                swipeRefreshLayout.setRefreshing(false);
-//                page = 0;
-//                adapter.setData(reList);
-//                recyclerView.setAutoLoadMoreEnable(false);
-//                adapter.notifyDataSetChanged();
-//            }
-//        });
-//        recyclerView = (MyLoadMoreRecyclerView) findViewById(R.id.re_list);
-//        recyclerView.setHasFixedSize(true);
         navigationView.setNavigationItemSelectedListener(this);
         headerImage.setOnClickListener(this);
         headerTextView.setOnClickListener(this);
@@ -122,7 +123,6 @@ public class MainAty extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_new_politics) {
@@ -165,7 +165,6 @@ public class MainAty extends AppCompatActivity
              * 退出应用
              */
             case R.id.nav_exit_to_app:
-//                Toast.makeText(getApplicationContext(), "点击了退出", Toast.LENGTH_SHORT).show();
                 android.os.Process.killProcess(android.os.Process.myPid());//获取PID
                 System.exit(0);//常规java、c#的标准退出法，返回值为0代表正常退出
                 break;
@@ -187,23 +186,6 @@ public class MainAty extends AppCompatActivity
                 super.onSuccess(t);
                 reList = JSON.parseArray(t, PoliticsByInternetBean.class);
                 ToastUtil.showToast(getApplicationContext(), reList.toString());
-//                recyclerView.setLayoutManager(new LinearLayoutManager(MainAty.this));
-//                adapter = new MyRecyclerViewAdapter(reList);
-//                recyclerView.setAutoLoadMoreEnable(true);
-//                recyclerView.setLoadMoreListener(new MyLoadMoreRecyclerView.LoadMoreListener() {
-//                    @Override
-//                    public void onLoadMore() {
-//                        recyclerView.postDelayed(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                swipeRefreshLayout.setRefreshing(false);
-//                                adapter.addDatas(reList);
-//                                recyclerView.notifyMoreFinish(false);
-//                            }
-//                        }, 1000);
-//                    }
-//                });
-//                adapter.notifyDataSetChanged();
             }
         });
     }
@@ -266,4 +248,80 @@ public class MainAty extends AppCompatActivity
         builder.show();
     }
 
+    private class MyAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            // TODO Auto-generated method stub
+            return textList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            // TODO Auto-generated method stub
+            return textList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            // TODO Auto-generated method stub
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // TODO Auto-generated method stub
+            TextView textView = new TextView(MainAty.this);
+            textView.setText(textList.get(position));
+            textView.setTextColor(Color.WHITE);
+            textView.setTextSize(18.0f);
+            return textView;
+        }
+
+    }
+
+    @Override
+    public void onDownPullRefresh() {
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                SystemClock.sleep(2000);
+                for (int i = 0; i < 2; i++) {
+                    textList.add(0, "这是下拉刷新出来的数据" + i);
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                adapter.notifyDataSetChanged();
+                rListView.hideHeaderView();
+            }
+        }.execute(new Void[]{});
+    }
+
+    @Override
+    public void onLoadingMore() {
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                SystemClock.sleep(5000);
+
+                textList.add("这是加载更多出来的数据1");
+                textList.add("这是加载更多出来的数据2");
+                textList.add("这是加载更多出来的数据3");
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                adapter.notifyDataSetChanged();
+
+                // 控制脚布局隐藏
+                rListView.hideFooterView();
+            }
+        }.execute(new Void[]{});
+    }
 }

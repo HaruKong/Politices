@@ -12,16 +12,9 @@
     tools:context=".ui.MainAty"
     tools:showIn="@layout/app_bar_main">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/refresh_layout"
+    <com.lit.harukong.widget.RefreshListView
+        android:id="@+id/refresh_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" />
 
-        <com.lit.harukong.widget.MyLoadMoreRecyclerView
-            android:id="@+id/re_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/item_recycler_view" />
-    </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

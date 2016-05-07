@@ -26,4 +26,7 @@
 
     <string name="nav_swap_user">切换用户</string>
     <string name="loading">加载中。。。</string>
+    <string name="loading_more">加载更多...</string>
+    <string name="last_update_time">最后刷新时间: 2014-10-10 12:56:12</string>
+    <string name="header_state">下拉刷新</string>
 </resources>
