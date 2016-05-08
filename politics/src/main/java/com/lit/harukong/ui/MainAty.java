@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -18,15 +18,15 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.lit.harukong.AppContext;
 import com.lit.harukong.R;
+import com.lit.harukong.adapter.MyPoliticsListAdapter;
 import com.lit.harukong.bean.PoliticsByInternetBean;
 import com.lit.harukong.interf.OnRefreshListener;
 import com.lit.harukong.util.ToastUtil;
@@ -41,9 +41,9 @@ import java.util.List;
 public class MainAty extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, OnRefreshListener {
 
-    private List<String> textList;
-    private MyAdapter adapter;
+    private MyPoliticsListAdapter adapter;
     private RefreshListView rListView;
+    private LinearLayout loading_data;
 
     private List<PoliticsByInternetBean> reList;
     protected Toolbar toolbar;
@@ -53,9 +53,17 @@ public class MainAty extends AppCompatActivity
     protected ImageView headerImage;
     private TextView headerTextView;
     protected TextView exitApp;
+
+    protected TextView politics_bar_btn_delete;
+    protected TextView politics_show_list;
+    protected TextView politics_show_detail;
     private SharedPreferences sp;
     private Intent intent = new Intent();
     private String mLoginName;
+
+    private Drawable drawable_delete;
+    private Drawable drawable_list;
+    private Drawable drawable_detail;
 
 
     @Override
@@ -69,16 +77,9 @@ public class MainAty extends AppCompatActivity
             public void run() {
                 headerTextView.setText(mLoginName);
                 headerTextView.setTextSize(18);
+                setDrawable();
             }
         });
-        rListView = (RefreshListView) findViewById(R.id.refresh_list);
-        textList = new ArrayList<String>();
-        for (int i = 0; i < 25; i++) {
-            textList.add("这是一条ListView的数据" + i);
-        }
-        adapter = new MyAdapter();
-        rListView.setAdapter(adapter);
-        rListView.setOnRefreshListener(this);
     }
 
     public void initData() {
@@ -97,6 +98,11 @@ public class MainAty extends AppCompatActivity
         headerImage = (ImageView) headerView.findViewById(R.id.header_imageView);
         headerTextView = (TextView) headerView.findViewById(R.id.header_login_ID);
         exitApp = (TextView) findViewById(R.id.nav_exit_to_app);
+        rListView = (RefreshListView) findViewById(R.id.refresh_list);
+        loading_data = (LinearLayout) findViewById(R.id.loading_data);
+        politics_bar_btn_delete = (TextView) findViewById(R.id.politics_bar_btn_delete);
+        politics_show_list = (TextView) findViewById(R.id.politics_show_list);
+        politics_show_detail = (TextView) findViewById(R.id.politics_show_detail);
         navigationView.setNavigationItemSelectedListener(this);
         headerImage.setOnClickListener(this);
         headerTextView.setOnClickListener(this);
@@ -106,9 +112,24 @@ public class MainAty extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
     }
 
+    public void setDrawable() {
+        drawable_delete = getResources().getDrawable(R.drawable.politics_bar_btn_delete_normal);
+                /* 第一0是距左边距离，第二0是距上边距离，60分别是长宽 */
+        drawable_delete.setBounds(0, 0, 60, 60);
+        politics_bar_btn_delete.setCompoundDrawables(null, drawable_delete, null, null);
+
+        drawable_list = getResources().getDrawable(R.drawable.politics_show_list);
+                /* 第一0是距左边距离，第二0是距上边距离，60分别是长宽 */
+        drawable_list.setBounds(0, 0, 60, 60);
+        politics_show_list.setCompoundDrawables(null, drawable_list, null, null);
+
+        drawable_detail = getResources().getDrawable(R.drawable.politics_show_detail);
+                /* 第一0是距左边距离，第二0是距上边距离，60分别是长宽 */
+        drawable_detail.setBounds(0, 0, 60, 60);
+        politics_show_detail.setCompoundDrawables(null, drawable_detail, null, null);
+    }
 
     @Override
     public void onBackPressed() {
@@ -185,7 +206,15 @@ public class MainAty extends AppCompatActivity
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 reList = JSON.parseArray(t, PoliticsByInternetBean.class);
-                ToastUtil.showToast(getApplicationContext(), reList.toString());
+                adapter = new MyPoliticsListAdapter(MainAty.this, reList);
+                rListView.setAdapter(adapter);
+                rListView.setOnRefreshListener(MainAty.this);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                loading_data.setVisibility(View.GONE);
             }
         });
     }
@@ -248,38 +277,6 @@ public class MainAty extends AppCompatActivity
         builder.show();
     }
 
-    private class MyAdapter extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            // TODO Auto-generated method stub
-            return textList.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            // TODO Auto-generated method stub
-            return textList.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            // TODO Auto-generated method stub
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
-            TextView textView = new TextView(MainAty.this);
-            textView.setText(textList.get(position));
-            textView.setTextColor(Color.WHITE);
-            textView.setTextSize(18.0f);
-            return textView;
-        }
-
-    }
-
     @Override
     public void onDownPullRefresh() {
         new AsyncTask<Void, Void, Void>() {
@@ -287,9 +284,12 @@ public class MainAty extends AppCompatActivity
             @Override
             protected Void doInBackground(Void... params) {
                 SystemClock.sleep(2000);
-                for (int i = 0; i < 2; i++) {
-                    textList.add(0, "这是下拉刷新出来的数据" + i);
-                }
+                PoliticsByInternetBean politicsByInternetBean = new PoliticsByInternetBean();
+                politicsByInternetBean.setTitle("这是下拉刷新出来的数据");
+                PoliticsByInternetBean politicsByInternetBean1 = new PoliticsByInternetBean();
+                politicsByInternetBean1.setTitle("这是下拉刷新出来的数据1");
+                reList.add(politicsByInternetBean);
+                reList.add(politicsByInternetBean1);
                 return null;
             }
 
@@ -309,9 +309,12 @@ public class MainAty extends AppCompatActivity
             protected Void doInBackground(Void... params) {
                 SystemClock.sleep(5000);
 
-                textList.add("这是加载更多出来的数据1");
-                textList.add("这是加载更多出来的数据2");
-                textList.add("这是加载更多出来的数据3");
+                PoliticsByInternetBean politicsByInternetBean = new PoliticsByInternetBean();
+                politicsByInternetBean.setTitle("这是加载更多出来的数据1");
+                PoliticsByInternetBean politicsByInternetBean1 = new PoliticsByInternetBean();
+                politicsByInternetBean1.setTitle("这是加载更多出来的数据2");
+                reList.add(politicsByInternetBean);
+                reList.add(politicsByInternetBean1);
                 return null;
             }
 
