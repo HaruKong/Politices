@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/smokeWhite"
-    android:padding="5dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ui.MainAty"
     tools:showIn="@layout/app_bar_main">
@@ -37,8 +36,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/bottom_bar"
+        android:layout_alignParentTop="true"
         android:divider="#00000000"
-        android:dividerHeight="5dp" />
+        android:dividerHeight="5dp"
+        android:padding="5dp" />
 
     <LinearLayout
         android:id="@+id/bottom_bar"
@@ -46,26 +47,20 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/smokeWhite"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/politics_bar_btn_delete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableTop="@drawable/politics_bar_btn_delete_normal"
             android:gravity="center"
-            android:paddingTop="4dp"
             android:text="删除"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/politics_show_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:paddingTop="4dp"
-            android:text="列表"
             android:textSize="12sp" />
 
         <TextView
@@ -73,10 +68,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableTop="@drawable/politics_show_detail"
             android:gravity="center"
-            android:paddingTop="4dp"
             android:text="明细"
             android:textSize="12sp" />
 
+        <TextView
+            android:id="@+id/politics_show_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableTop="@drawable/politics_show_list"
+            android:gravity="center"
+            android:text="列表"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+
     </LinearLayout>
+
 </RelativeLayout>

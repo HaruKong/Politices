@@ -48,4 +48,8 @@
         <item name="android:windowCloseOnTouchOutside">false</item>
         <item name="android:windowAnimationStyle">@anim/dialog_exit</item>
     </style>
+
+    <style name="CustomCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/checkbox_skin</item>
+    </style>
 </resources>

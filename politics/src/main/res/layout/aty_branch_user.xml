@@ -12,6 +12,7 @@
         android:gravity="center"
         android:orientation="horizontal">
 
+
         <ProgressBar
             android:id="@+id/user_progressBar_branch"
             android:layout_width="wrap_content"
@@ -19,6 +20,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:indeterminateDrawable="@drawable/common_progressbar"
             android:visibility="invisible" />
 
 

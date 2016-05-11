@@ -18,6 +18,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -34,7 +35,6 @@ import com.lit.harukong.widget.RefreshListView;
 
 import org.kymjs.kjframe.http.HttpCallBack;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -44,6 +44,7 @@ public class MainAty extends AppCompatActivity
     private MyPoliticsListAdapter adapter;
     private RefreshListView rListView;
     private LinearLayout loading_data;
+    private boolean isShowDetail = false;
 
     private List<PoliticsByInternetBean> reList;
     protected Toolbar toolbar;
@@ -57,14 +58,13 @@ public class MainAty extends AppCompatActivity
     protected TextView politics_bar_btn_delete;
     protected TextView politics_show_list;
     protected TextView politics_show_detail;
+
+
     private SharedPreferences sp;
     private Intent intent = new Intent();
     private String mLoginName;
-
-    private Drawable drawable_delete;
-    private Drawable drawable_list;
-    private Drawable drawable_detail;
-
+    private String mUsers;
+    private LinearLayout bottom_bar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +77,7 @@ public class MainAty extends AppCompatActivity
             public void run() {
                 headerTextView.setText(mLoginName);
                 headerTextView.setTextSize(18);
-                setDrawable();
+                initAdminOrNope();
             }
         });
     }
@@ -85,6 +85,7 @@ public class MainAty extends AppCompatActivity
     public void initData() {
         sp = getSharedPreferences("PoliticsInfo", Activity.MODE_PRIVATE);
         mLoginName = sp.getString("mLogin", "");
+        mUsers = sp.getString("userID", "");
         politicsInfo();
     }
 
@@ -100,35 +101,33 @@ public class MainAty extends AppCompatActivity
         exitApp = (TextView) findViewById(R.id.nav_exit_to_app);
         rListView = (RefreshListView) findViewById(R.id.refresh_list);
         loading_data = (LinearLayout) findViewById(R.id.loading_data);
+        bottom_bar = (LinearLayout) findViewById(R.id.bottom_bar);
         politics_bar_btn_delete = (TextView) findViewById(R.id.politics_bar_btn_delete);
         politics_show_list = (TextView) findViewById(R.id.politics_show_list);
         politics_show_detail = (TextView) findViewById(R.id.politics_show_detail);
+
         navigationView.setNavigationItemSelectedListener(this);
         headerImage.setOnClickListener(this);
         headerTextView.setOnClickListener(this);
         exitApp.setOnClickListener(this);
         fab.setOnClickListener(this);
+        politics_show_list.setOnClickListener(this);
+        politics_show_detail.setOnClickListener(this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
     }
 
-    public void setDrawable() {
-        drawable_delete = getResources().getDrawable(R.drawable.politics_bar_btn_delete_normal);
-                /* 第一0是距左边距离，第二0是距上边距离，60分别是长宽 */
-        drawable_delete.setBounds(0, 0, 60, 60);
-        politics_bar_btn_delete.setCompoundDrawables(null, drawable_delete, null, null);
-
-        drawable_list = getResources().getDrawable(R.drawable.politics_show_list);
-                /* 第一0是距左边距离，第二0是距上边距离，60分别是长宽 */
-        drawable_list.setBounds(0, 0, 60, 60);
-        politics_show_list.setCompoundDrawables(null, drawable_list, null, null);
-
-        drawable_detail = getResources().getDrawable(R.drawable.politics_show_detail);
-                /* 第一0是距左边距离，第二0是距上边距离，60分别是长宽 */
-        drawable_detail.setBounds(0, 0, 60, 60);
-        politics_show_detail.setCompoundDrawables(null, drawable_detail, null, null);
+    /**
+     * 初始化时管理员还是其他
+     */
+    public void initAdminOrNope() {
+        if (!mLoginName.equals("admin")) {
+            politics_bar_btn_delete.setVisibility(View.GONE);
+        } else {
+            politics_bar_btn_delete.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -166,6 +165,22 @@ public class MainAty extends AppCompatActivity
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.politics_show_detail:
+                politics_show_detail.setVisibility(View.GONE);
+                politics_show_list.setVisibility(View.VISIBLE);
+                isShowDetail = true;
+                adapter = new MyPoliticsListAdapter(MainAty.this, reList, mLoginName, isShowDetail);
+                rListView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+                break;
+            case R.id.politics_show_list:
+                politics_show_list.setVisibility(View.GONE);
+                politics_show_detail.setVisibility(View.VISIBLE);
+                isShowDetail = false;
+                adapter = new MyPoliticsListAdapter(MainAty.this, reList, mLoginName, isShowDetail);
+                rListView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+                break;
             case R.id.fab:
                 Snackbar.make(v, "选择删除问政列表子选项", Snackbar.LENGTH_LONG)
                         .setAction("确定", new View.OnClickListener() {
@@ -200,15 +215,16 @@ public class MainAty extends AppCompatActivity
     public void politicsInfo() {
         String url = AppContext.url + "ViewPoliticsServlet";
         AppContext.kjp.put("param0", "getPolitics");
-        AppContext.kjp.put("loginID", mLoginName);
+        AppContext.kjp.put("Users", mUsers);
         AppContext.kjh.post(url, AppContext.kjp, false, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 reList = JSON.parseArray(t, PoliticsByInternetBean.class);
-                adapter = new MyPoliticsListAdapter(MainAty.this, reList);
+                adapter = new MyPoliticsListAdapter(MainAty.this, reList, mLoginName, isShowDetail);
                 rListView.setAdapter(adapter);
                 rListView.setOnRefreshListener(MainAty.this);
+                bottom_bar.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -233,8 +249,10 @@ public class MainAty extends AppCompatActivity
     public void statisticsPolitics() {
         if (!mLoginName.equals("admin")) {
             ToastUtil.showToast(getApplicationContext(), "您所在的用户组没有权限使用统计功能!");
+            politics_bar_btn_delete.setVisibility(View.GONE);
         } else {
             ToastUtil.showToast(getApplicationContext(), "管理员可以使用统计功能，但是工程师还没有写好");
+            politics_bar_btn_delete.setVisibility(View.VISIBLE);
         }
     }
 
@@ -243,6 +261,7 @@ public class MainAty extends AppCompatActivity
      */
     public void sqcPlatform() {
         intent.setClass(getApplicationContext(), SqcPlatFormAty.class);
+        intent.putExtra("url", "http://www.sqee.cn/forum-8-1.html");
         startActivity(intent);
     }
 
@@ -282,6 +301,11 @@ public class MainAty extends AppCompatActivity
         new AsyncTask<Void, Void, Void>() {
 
             @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
             protected Void doInBackground(Void... params) {
                 SystemClock.sleep(2000);
                 PoliticsByInternetBean politicsByInternetBean = new PoliticsByInternetBean();
@@ -304,6 +328,11 @@ public class MainAty extends AppCompatActivity
     @Override
     public void onLoadingMore() {
         new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
 
             @Override
             protected Void doInBackground(Void... params) {

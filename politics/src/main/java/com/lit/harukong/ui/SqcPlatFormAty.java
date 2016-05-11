@@ -24,7 +24,7 @@ import com.lit.harukong.util.ToastUtil;
 import com.lit.harukong.util.UrlManager;
 
 public class SqcPlatFormAty extends AppCompatActivity implements View.OnClickListener {
-    String url = "http://www.sqee.cn/forum-8-1.html";
+    String url;
     private EditText toolbarTitle;
     private WebView webView;
     private ProgressBar progressBar;
@@ -73,6 +73,7 @@ public class SqcPlatFormAty extends AppCompatActivity implements View.OnClickLis
     }
 
     public void init() {
+        url = getIntent().getStringExtra("url");
         toolbarTitle.setText(url);
         //启用支持javascript
         WebSettings settings = webView.getSettings();

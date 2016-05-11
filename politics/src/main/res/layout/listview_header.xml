@@ -47,7 +47,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dip"
-            android:text="@string/last_update_time"
             android:textColor="@color/colorAccent"
             android:textSize="14sp" />
     </LinearLayout>

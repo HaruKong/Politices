@@ -19,6 +19,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:indeterminateDrawable="@drawable/common_progressbar"
             android:visibility="visible" />
 
         <TextView

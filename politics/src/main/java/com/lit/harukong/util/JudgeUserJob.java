@@ -36,6 +36,9 @@ public class JudgeUserJob {
             case "10":
                 job = "值班人";
                 break;
+            default:
+                job = "";
+                break;
         }
         return job;
     }

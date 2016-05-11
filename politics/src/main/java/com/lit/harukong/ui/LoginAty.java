@@ -20,6 +20,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.lit.harukong.AppContext;
 import com.lit.harukong.R;
 import com.lit.harukong.util.MD5Util;
@@ -35,7 +37,7 @@ public class LoginAty extends AppCompatActivity {
 
 
     private SharedPreferences sp;
-    private String rs;//网络请求返回值
+    private JSONArray rs;//网络请求返回值
 
     private UserLoginTask mAuthTask = null;
 
@@ -156,7 +158,7 @@ public class LoginAty extends AppCompatActivity {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
-                rs = t;
+                rs = JSON.parseArray(t);
             }
 
             @Override
@@ -184,20 +186,19 @@ public class LoginAty extends AppCompatActivity {
 
     /**
      * 保存登录信息
-     *
      */
-    public void saveLoginInfo(String mLogin, String mPassword) {
+    public void saveLoginInfo(String userID, String mLogin, String mPassword) {
         SharedPreferences.Editor editor = sp.edit();
 
         editor.putString("isFirst", "false");
-//        editor.putString("mLogin", MD5Util.md5(mLogin));
+        editor.putString("userID", userID);
         editor.putString("mLogin", mLogin);
         editor.putString("mPassword", MD5Util.md5(mPassword));
         editor.putString("loginTime", TimeUtil.getFormat().systemDateTime());
         editor.apply();
     }
 
-    public class UserLoginTask extends AsyncTask<Void, Void, String> {
+    public class UserLoginTask extends AsyncTask<Void, Void, JSONArray> {
 
         private final String mLogin;
         private final String mPassword;
@@ -216,12 +217,9 @@ public class LoginAty extends AppCompatActivity {
         }
 
         @Override
-        protected String doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
+        protected JSONArray doInBackground(Void... params) {
             VerifyLogin(mLogin, mPassword);
             try {
-
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -230,14 +228,19 @@ public class LoginAty extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(final String success) {
+        protected void onPostExecute(JSONArray objects) {
+            super.onPostExecute(objects);
             mAuthTask = null;
+//            String success = "2";
+//            String userID = "432";
+            String success = objects.get(0).toString();
+            String userID = objects.get(1).toString();
             if (success != null) {
                 switch (success) {
                     case "2":
                         mDialogs.dismiss();
                         finish();
-                        saveLoginInfo(mLogin, mPassword);
+                        saveLoginInfo(userID, mLogin, mPassword);
                         Intent intent = new Intent();
                         intent.setClass(getApplicationContext(), MainAty.class);
                         startActivity(intent);
