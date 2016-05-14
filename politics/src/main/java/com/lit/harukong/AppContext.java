@@ -3,6 +3,7 @@ package com.lit.harukong;
 import android.app.Application;
 
 import com.alibaba.fastjson.JSON;
+import com.lit.harukong.bean.TB_GroupBean;
 import com.lit.harukong.bean.UserBean;
 import com.lit.harukong.util.ToastUtil;
 
@@ -24,9 +25,8 @@ public class AppContext extends Application {
     public static final int BRANCH = 1;//接收部门
     public static final int BRANCH_USER = 2;//部门接收人
 
-
     public static List<UserBean> userList;
-
+    public static List<TB_GroupBean> branchList;
 
     /**
      * 单一实例
@@ -38,28 +38,51 @@ public class AppContext extends Application {
         return userList;
     }
 
+    /**
+     * 单一实例
+     */
+    public static List<TB_GroupBean> getBranch() {
+        if (branchList == null) {
+            branchList = new ArrayList<>();
+        }
+        return branchList;
+    }
+
 
     @Override
     public void onCreate() {
         super.onCreate();
         userInfo();
-
+        branchInfo();
     }
 
     protected void userInfo() {
-        String url1 = url + "ApplicationServlet";
-        kjp.put("param0", "getUser");
+        String url1 = url + "ApplicationUserServlet";
+        kjp.put("param0_user", "getUser");
         kjh.post(url1, kjp, false, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 userList = JSON.parseArray(t, UserBean.class);
+
             }
 
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
                 ToastUtil.showToast(getApplicationContext(), "服务器连接失败");
+            }
+        });
+    }
+
+    protected void branchInfo() {
+        String url1 = url + "ApplicationBranchServlet";
+        kjp.put("param0_branch", "getT_Branch");
+        kjh.post(url1, kjp, false, new HttpCallBack() {
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                branchList = JSON.parseArray(t, TB_GroupBean.class);
             }
         });
     }

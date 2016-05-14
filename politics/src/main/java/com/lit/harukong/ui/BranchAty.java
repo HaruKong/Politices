@@ -169,7 +169,7 @@ public class BranchAty extends AppCompatActivity {
     }
 
     protected void getBranchInfo() {
-        String url = AppContext.url + "ApplicationServlet";
+        String url = AppContext.url + "ApplicationBranchServlet";
         AppContext.kjp.put("param0", "getT_Branch");
         AppContext.kjh.post(url, AppContext.kjp, false, new HttpCallBack() {
             @Override

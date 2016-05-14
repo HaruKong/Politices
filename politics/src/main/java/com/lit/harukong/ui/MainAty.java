@@ -18,9 +18,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,12 +31,14 @@ import com.lit.harukong.AppContext;
 import com.lit.harukong.R;
 import com.lit.harukong.adapter.MyPoliticsListAdapter;
 import com.lit.harukong.bean.PoliticsByInternetBean;
+import com.lit.harukong.bean.TB_GroupBean;
 import com.lit.harukong.interf.OnRefreshListener;
 import com.lit.harukong.util.ToastUtil;
 import com.lit.harukong.widget.RefreshListView;
 
 import org.kymjs.kjframe.http.HttpCallBack;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -80,6 +84,11 @@ public class MainAty extends AppCompatActivity
                 initAdminOrNope();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     public void initData() {
@@ -216,6 +225,7 @@ public class MainAty extends AppCompatActivity
         String url = AppContext.url + "ViewPoliticsServlet";
         AppContext.kjp.put("param0", "getPolitics");
         AppContext.kjp.put("Users", mUsers);
+        AppContext.kjp.put("mLoginName", mLoginName);
         AppContext.kjh.post(url, AppContext.kjp, false, new HttpCallBack() {
             @Override
             public void onSuccess(String t) {
@@ -224,6 +234,13 @@ public class MainAty extends AppCompatActivity
                 adapter = new MyPoliticsListAdapter(MainAty.this, reList, mLoginName, isShowDetail);
                 rListView.setAdapter(adapter);
                 rListView.setOnRefreshListener(MainAty.this);
+                rListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+                rListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        ToastUtil.showToast(getApplicationContext(), "你点击了" + position + "项");
+                    }
+                });
                 bottom_bar.setVisibility(View.VISIBLE);
             }
 
@@ -269,6 +286,9 @@ public class MainAty extends AppCompatActivity
      * 设置
      */
     public void settings() {
+//        intent.setClass(getApplicationContext(), AppSettings.class);
+//        startActivity(intent);
+
         ToastUtil.showToast(getApplicationContext(), "暂时不知道要做哪些功能，先放一放！");
     }
 

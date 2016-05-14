@@ -3,8 +3,6 @@ package com.lit.harukong.ui;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
@@ -31,8 +29,8 @@ public class SqcPlatFormAty extends AppCompatActivity implements View.OnClickLis
     private TextView copy;
     private ImageView web_back;
     private ImageView web_forward;
-    private ImageView web_refresh;
-    private ImageView web_export;
+    ImageView web_refresh;
+    ImageView web_export;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

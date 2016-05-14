@@ -52,6 +52,7 @@ public class BranchUserAty extends Activity {
         initData();
         listAdapter = new MyUserListAdapter(BranchUserAty.this, group, child);
         expandableListView.setAdapter(listAdapter);
+
     }
 
     @Override
@@ -163,6 +164,5 @@ public class BranchUserAty extends Activity {
             }
         }
         child.add(list);
-
     }
 }
