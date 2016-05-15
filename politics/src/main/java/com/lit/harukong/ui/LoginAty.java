@@ -47,6 +47,7 @@ public class LoginAty extends AppCompatActivity {
     private View mLoginFormView;
     private ProgressDialog mDialogs;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +78,20 @@ public class LoginAty extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         judgeFirst();
+
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                int swap = getIntent().getIntExtra("swap", -1);
+
+                if (0 == swap) {
+                    finish();
+                } else if (1 == swap) {
+                    mLoginView.setText(sp.getString("mLogin", ""));
+                }
+            }
+        });
     }
 
 
@@ -188,8 +203,8 @@ public class LoginAty extends AppCompatActivity {
      * 保存登录信息
      */
     public void saveLoginInfo(String userID, String mLogin, String mPassword) {
-        SharedPreferences.Editor editor = sp.edit();
 
+        SharedPreferences.Editor editor = sp.edit();
         editor.putString("isFirst", "false");
         editor.putString("userID", userID);
         editor.putString("mLogin", mLogin);

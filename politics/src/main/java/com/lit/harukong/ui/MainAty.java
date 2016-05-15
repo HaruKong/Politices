@@ -286,10 +286,10 @@ public class MainAty extends AppCompatActivity
      * 设置
      */
     public void settings() {
-//        intent.setClass(getApplicationContext(), AppSettings.class);
-//        startActivity(intent);
+        intent.setClass(getApplicationContext(), AppSettings.class);
+        startActivity(intent);
 
-        ToastUtil.showToast(getApplicationContext(), "暂时不知道要做哪些功能，先放一放！");
+//        ToastUtil.showToast(getApplicationContext(), "暂时不知道要做哪些功能，先放一放！");
     }
 
     /**
@@ -303,9 +303,11 @@ public class MainAty extends AppCompatActivity
             public void onClick(DialogInterface dialog, int which) {
 
                 SharedPreferences.Editor editor = sp.edit();
-                editor.clear().apply();
+                editor.putString("isFirst", "");
+                editor.apply();
                 MainAty.this.finish();
                 intent.setClass(MainAty.this, LoginAty.class);
+                intent.putExtra("swap", 1);
                 startActivity(intent);
             }
         });

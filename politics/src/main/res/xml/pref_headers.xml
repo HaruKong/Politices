@@ -1,0 +1,26 @@
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- These settings headers are only used on tablets. -->
+
+
+    <header
+        android:fragment="com.lit.harukong.ui.AppSettings$NotificationPreferenceFragment"
+        android:icon="@drawable/ic_notifications_black_24dp"
+        android:summary="铃声、震动"
+        android:title="@string/pref_header_notifications" />
+    <header
+        android:fragment="com.lit.harukong.ui.AppSettings$NetWorkPreferenceFragment"
+        android:icon="@drawable/ic_wifi_black_24dp"
+        android:summary="Wifi、2G、3G、4G"
+        android:title="@string/pref_header_network" />
+    <header
+        android:fragment="com.lit.harukong.ui.AppSettings$CachedPreferenceFragment"
+        android:icon="@drawable/ic_cached_black_24dp"
+        android:summary="清除缓存"
+        android:title="@string/pref_header_cached" />
+    <header
+        android:fragment="com.lit.harukong.ui.AppSettings$AboutPreferenceFragment"
+        android:icon="@drawable/ic_attach_file_black_24dp"
+        android:summary="宿迁网络发言人问政管理系统"
+        android:title="@string/pref_header_about" />
+</preference-headers>

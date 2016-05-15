@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="Wifi_only_networked"
+        android:summary="退出应用后，自动清除所有缓存"
+        android:title="自动清除缓存" />
+
+</PreferenceScreen>
