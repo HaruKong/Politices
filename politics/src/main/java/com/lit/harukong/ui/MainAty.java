@@ -266,10 +266,10 @@ public class MainAty extends AppCompatActivity
     public void statisticsPolitics() {
         if (!mLoginName.equals("admin")) {
             ToastUtil.showToast(getApplicationContext(), "您所在的用户组没有权限使用统计功能!");
-            politics_bar_btn_delete.setVisibility(View.GONE);
         } else {
-            ToastUtil.showToast(getApplicationContext(), "管理员可以使用统计功能，但是工程师还没有写好");
-            politics_bar_btn_delete.setVisibility(View.VISIBLE);
+            intent.setClass(getApplicationContext(), CountAty.class);
+            startActivity(intent);
+//            ToastUtil.showToast(getApplicationContext(), "管理员可以使用统计功能，但是工程师还没有写好");
         }
     }
 
@@ -297,7 +297,7 @@ public class MainAty extends AppCompatActivity
      */
     public void swapUser() {
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainAty.this);
-        builder.setTitle(R.string.nav_swap_user);
+        builder.setMessage("确定要切换用户吗？");
         builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

@@ -20,7 +20,7 @@
 
     <string name="title_activity_main">问政列表</string>
     <string name="title_activity_new_politics">新建问政</string>
-    <string name="title_activity_static">统计问政</string>
+    <string name="title_activity_statistics">统计问政</string>
     <string name="title_activity_sqc_plat_form">宿迁论坛</string>
     <string name="title_activity_app_settings">设置</string>
 
@@ -43,4 +43,15 @@
     <string name="pref_header_cached">缓存设置</string>
     <!-- settings for about -->
     <string name="pref_header_about">关于</string>
+    <string name="title_activity_count_aty">CountAty</string>
+    <!--问政统计表头-->
+    <string name="branch">部门</string>
+    <string name="total">问政总数</string>
+    <string name="state0">未回应</string>
+    <string name="state1">已关注</string>
+    <string name="s1_in_time0">关注及时</string>
+    <string name="s1_in_time1">关注超时</string>
+    <string name="state2">已回复</string>
+    <string name="s2_in_time0">回复及时</string>
+    <string name="s2_in_time1">回复超时</string>
 </resources>

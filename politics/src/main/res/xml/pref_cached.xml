@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="清除缓存">
+        <Preference
+            android:key="clear_cached"
+            android:title="清除所有缓存" />
+    </PreferenceCategory>
     <SwitchPreference
-        android:defaultValue="true"
-        android:key="Wifi_only_networked"
-        android:summary="退出应用后，自动清除所有缓存"
+        android:defaultValue="false"
+        android:key="auto_clear_cached"
+        android:summaryOff="需要手动清除所有缓存"
+        android:summaryOn="退出应用后，自动清除所有缓存"
         android:title="自动清除缓存" />
 
 </PreferenceScreen>

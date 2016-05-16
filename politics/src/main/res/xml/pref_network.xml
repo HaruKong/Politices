@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <SwitchPreference
-        android:defaultValue="true"
+        android:defaultValue="false"
+        android:disableDependentsState="true"
         android:key="Wifi_only_networked"
-        android:summary="2G/3G/4G网络下不耗流量"
+        android:summaryOff="2G/3G/4G网络下耗流量"
+        android:summaryOn="2G/3G/4G网络下不耗流量"
         android:title="仅Wifi下联网" />
     <SwitchPreference
         android:defaultValue="true"

@@ -53,6 +53,10 @@
             android:name=".ui.AppSettings"
             android:label="@string/title_activity_app_settings"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.CountAty"
+            android:label="@string/title_activity_count_aty"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

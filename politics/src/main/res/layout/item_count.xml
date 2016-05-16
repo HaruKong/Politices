@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minHeight="50dip"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/item_branch"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:background="?android:attr/selectableItemBackground"
+        android:gravity="center" />
+
+
+    <com.lit.harukong.widget.CountScrollView
+        android:id="@+id/item_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <View style="@style/line" />
+
+            <TextView
+                android:id="@+id/item_total"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center" />
+
+            <View style="@style/line" />
+
+            <TextView
+                android:id="@+id/item_state0"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center" />
+
+            <View style="@style/line" />
+
+            <TextView
+                android:id="@+id/item_state1"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center" />
+
+            <View style="@style/line" />
+
+            <TextView
+                android:id="@+id/item_s1_in_time0"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center" />
+
+            <View style="@style/line" />
+
+            <TextView
+                android:id="@+id/item_s1_in_time1"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center" />
+
+            <View style="@style/line" />
+
+            <TextView
+                android:id="@+id/item_state2"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center" />
+
+            <View style="@style/line" />
+
+            <TextView
+                android:id="@+id/item_s2_in_time0"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center" />
+
+            <View style="@style/line" />
+
+            <TextView
+                android:id="@+id/item_s2_in_time1"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center" />
+        </LinearLayout>
+    </com.lit.harukong.widget.CountScrollView>
+
+</LinearLayout>

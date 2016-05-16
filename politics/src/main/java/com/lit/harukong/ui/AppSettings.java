@@ -155,7 +155,7 @@ public class AppSettings extends AppCompatPreferenceActivity {
             tintManager.setStatusBarTintResource(R.color.colorPrimary);
         }
         LinearLayout root = (LinearLayout) findViewById(android.R.id.list).getParent().getParent().getParent();
-        toolbar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.settings_toolbar, root, false);
+        toolbar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.content_settings, root, false);
         setSupportActionBar(toolbar);
         root.addView(toolbar, 0); // insert at top
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -181,13 +181,14 @@ public class AppSettings extends AppCompatPreferenceActivity {
                 //这个是整个button透明度为0，也用b.getBackground().setAlpha(0);这样只把背景透明
                 button.getBackground().setAlpha(0);
                 handler.sendEmptyMessageDelayed(0, 50);
-                SharedPreferences.Editor editor = sp.edit();
-                editor.clear().apply();
+
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(AppSettings.this);
-                builder.setTitle("注销退出");
+                builder.setMessage("确定要注销退出？");
                 builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        SharedPreferences.Editor editor = sp.edit();
+                        editor.clear().apply();
                         Intent intent = new Intent();
                         intent.setClass(AppSettings.this, LoginAty.class);
                         // 此方法要求最低API为11
@@ -264,8 +265,10 @@ public class AppSettings extends AppCompatPreferenceActivity {
         }
     }
 
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class NetWorkPreferenceFragment extends PreferenceFragment {
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -276,11 +279,34 @@ public class AppSettings extends AppCompatPreferenceActivity {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class CachedPreferenceFragment extends PreferenceFragment {
+
+        private Preference clera_cached_preference;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_cached);
             setHasOptionsMenu(true);
+            clera_cached_preference = findPreference("clear_cached");
+            clera_cached_preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
+                    builder.setTitle("确定要清除所有缓存吗？");
+                    builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                        }
+                    });
+                    builder.show();
+                    return false;
+                }
+            });
         }
     }
 
@@ -293,7 +319,6 @@ public class AppSettings extends AppCompatPreferenceActivity {
             setHasOptionsMenu(true);
         }
     }
-
 
 }
 

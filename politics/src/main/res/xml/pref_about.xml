@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <Preference android:title="Copyright © 2016 - 网络问政管理" />
+    <Preference android:title="技术支持：lit软件" />
+    <Preference android:title="E-Mail：1195472325@qq.com" />
 </PreferenceScreen>

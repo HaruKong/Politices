@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.lit.harukong.ui.CountAty"
+    tools:showIn="@layout/aty_count">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ccc"
+        android:minHeight="40dip"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="@string/branch"
+            android:textColor="#850" />
+
+        <com.lit.harukong.widget.CountScrollView
+            android:id="@+id/item_scroll_title"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <View style="@style/line" />
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="@string/total"
+                    android:textColor="#850" />
+
+                <View style="@style/line" />
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="@string/state0"
+                    android:textColor="#850" />
+
+                <View style="@style/line" />
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="@string/state1"
+                    android:textColor="#850" />
+
+                <View style="@style/line" />
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="@string/s1_in_time0"
+                    android:textColor="#850" />
+
+                <View style="@style/line" />
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="@string/s1_in_time1"
+                    android:textColor="#850" />
+
+                <View style="@style/line" />
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="@string/state2"
+                    android:textColor="#850" />
+
+                <View style="@style/line" />
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="@string/s2_in_time0"
+                    android:textColor="#850" />
+
+                <View style="@style/line" />
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="@string/s2_in_time1"
+                    android:textColor="#850" />
+
+            </LinearLayout>
+        </com.lit.harukong.widget.CountScrollView>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/scroll_list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:cacheColorHint="@android:color/transparent"
+        android:scrollbars="none" />
+</LinearLayout>

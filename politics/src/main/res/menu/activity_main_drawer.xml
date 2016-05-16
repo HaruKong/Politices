@@ -10,7 +10,7 @@
             <item
                 android:id="@+id/nav_statistics_politics"
                 android:icon="@drawable/ic_menu_statics_receipt"
-                android:title="@string/title_activity_static" />
+                android:title="@string/title_activity_statistics" />
         </menu>
     </item>
 
