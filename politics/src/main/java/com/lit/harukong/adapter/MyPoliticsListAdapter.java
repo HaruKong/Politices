@@ -14,6 +14,7 @@ import com.lit.harukong.AppContext;
 import com.lit.harukong.R;
 import com.lit.harukong.bean.PoliticsByInternetBean;
 import com.lit.harukong.bean.TB_GroupBean;
+import com.lit.harukong.ui.EditPoliticsAty;
 import com.lit.harukong.ui.SqcPlatFormAty;
 import com.lit.harukong.util.JudgeIsLock;
 import com.lit.harukong.util.JudgePoliticsType;
@@ -175,6 +176,14 @@ public class MyPoliticsListAdapter extends BaseAdapter {
                 Intent intent = new Intent();
                 intent.setClass(mContext, SqcPlatFormAty.class);
                 intent.putExtra("url", reList.get(position).getUrl());
+                mContext.startActivity(intent);
+            }
+        });
+        viewHolder.item_list_change.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(mContext, EditPoliticsAty.class);
                 mContext.startActivity(intent);
             }
         });

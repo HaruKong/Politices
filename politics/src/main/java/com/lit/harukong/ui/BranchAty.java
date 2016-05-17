@@ -207,7 +207,7 @@ public class BranchAty extends AppCompatActivity {
                 intent.putExtras(bundle);
                 setResult(AppContext.BRANCH, intent);
                 BranchAty.this.finish();
-                ToastUtil.showToast(getApplicationContext(), "与服务器断开连接！请检查网络连接是否正常！");
+                ToastUtil.showToast(getApplicationContext(), "服务器异常");
             }
 
             @Override

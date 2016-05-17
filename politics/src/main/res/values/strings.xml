@@ -29,8 +29,12 @@
     <string name="loading_more">加载更多...</string>
     <string name="header_state">下拉刷新</string>
 
-    <!-- Strings related to Settings -->
-
+    <!-- 问政列表-->
+    <string name="title_activity_count_aty">问政统计</string>
+    <string name="title_activity_view_politics_aty">问政处理</string>
+    <string name="subtitle_activity_view_politics_aty">查看问政</string>
+    <string name="title_activity_edit_politics_aty">问政管理</string>
+    <string name="subtitle_activity_edit_politics_aty">编辑问政</string>
     <!-- settings for Notifications -->
     <string name="pref_header_notifications">通知</string>
     <string name="pref_title_new_message_notifications">新消息通知</string>
@@ -43,7 +47,7 @@
     <string name="pref_header_cached">缓存设置</string>
     <!-- settings for about -->
     <string name="pref_header_about">关于</string>
-    <string name="title_activity_count_aty">CountAty</string>
+
     <!--问政统计表头-->
     <string name="branch">部门</string>
     <string name="total">问政总数</string>
@@ -54,4 +58,5 @@
     <string name="state2">已回复</string>
     <string name="s2_in_time0">回复及时</string>
     <string name="s2_in_time1">回复超时</string>
+
 </resources>

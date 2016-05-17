@@ -11,4 +11,10 @@
     <color name="blue">#1C86EE</color>
     <color name="childDivider">#885D7081</color>
     <color name="divider">#88455869</color>
+
+    <!-- 下拉刷新时，颜色值 -->
+    <color name="swipe_color_1">#ff00ddff</color>
+    <color name="swipe_color_2">#ffffbb33</color>
+    <color name="swipe_color_3">#ffff4444</color>
+    <color name="swipe_color_4">#ffaa66cc</color>
 </resources>

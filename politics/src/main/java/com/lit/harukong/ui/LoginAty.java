@@ -26,6 +26,7 @@ import com.lit.harukong.AppContext;
 import com.lit.harukong.R;
 import com.lit.harukong.util.MD5Util;
 import com.lit.harukong.util.TimeUtil;
+import com.lit.harukong.util.ToastUtil;
 
 import org.kymjs.kjframe.http.HttpCallBack;
 
@@ -252,6 +253,14 @@ public class LoginAty extends AppCompatActivity {
             String userID = objects.get(1).toString();
             if (success != null) {
                 switch (success) {
+                    case "3":
+                        mDialogs.dismiss();
+                        showForm(false);
+                        ToastUtil.showToast(getApplicationContext(), "此账号已停用，请联系管理员！");
+//                        mLoginView.setText("");
+                        mPasswordView.setText("");
+                        mLoginView.requestFocus();
+                        break;
                     case "2":
                         mDialogs.dismiss();
                         finish();
@@ -275,7 +284,7 @@ public class LoginAty extends AppCompatActivity {
                         break;
                 }
             } else {
-                Toast.makeText(getApplicationContext(), "服务器请求失败！", Toast.LENGTH_SHORT).show();
+                ToastUtil.showToast(getApplicationContext(), "服务器异常");
                 showForm(false);
                 mDialogs.dismiss();
             }

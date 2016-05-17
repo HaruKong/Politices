@@ -1,6 +1,7 @@
 package com.lit.harukong;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.alibaba.fastjson.JSON;
 import com.lit.harukong.bean.TB_GroupBean;
@@ -18,6 +19,7 @@ import java.util.List;
  * Created by haru on 2016/3/10.
  */
 public class AppContext extends Application {
+    static Context _context;
     public static final KJHttp kjh = new KJHttp();
     public static final HttpParams kjp = new HttpParams();
     public static final String url = "http://www.lit402.top:8080/PoliticsService/";
@@ -27,6 +29,20 @@ public class AppContext extends Application {
 
     public static List<UserBean> userList;
     public static List<TB_GroupBean> branchList;
+
+    private static AppContext instance;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        instance = this;
+        userInfo();
+        branchInfo();
+    }
+
+    public static synchronized AppContext context() {
+        return (AppContext) _context;
+    }
 
     /**
      * 单一实例
@@ -49,11 +65,13 @@ public class AppContext extends Application {
     }
 
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        userInfo();
-        branchInfo();
+    /**
+     * 获得当前app运行的AppContext
+     *
+     * @return
+     */
+    public static AppContext getInstance() {
+        return instance;
     }
 
     protected void userInfo() {
@@ -70,7 +88,7 @@ public class AppContext extends Application {
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                ToastUtil.showToast(getApplicationContext(), "服务器连接失败");
+                ToastUtil.showToast(getApplicationContext(), "服务器异常");
             }
         });
     }

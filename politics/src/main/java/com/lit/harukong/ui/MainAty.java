@@ -238,7 +238,8 @@ public class MainAty extends AppCompatActivity
                 rListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        ToastUtil.showToast(getApplicationContext(), "你点击了" + position + "项");
+                        intent.setClass(getApplicationContext(), ViewPoliticsAty.class);
+                        startActivity(intent);
                     }
                 });
                 bottom_bar.setVisibility(View.VISIBLE);

@@ -58,4 +58,9 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">@color/gray</item>
     </style>
+
+    <style name="Theme.AppStartLoad" parent="android:Theme.Black.NoTitleBar.Fullscreen">
+        <item name="android:windowBackground">@drawable/welcome</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
 </resources>

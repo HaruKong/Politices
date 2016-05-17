@@ -1,29 +1,44 @@
 package com.lit.harukong.ui;
 
-import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.lit.harukong.AppContext;
 import com.lit.harukong.R;
+import com.lit.harukong.adapter.ScrollAdapter;
+import com.lit.harukong.bean.CountBean;
+import com.lit.harukong.interf.OnRefreshListener;
+import com.lit.harukong.util.ToastUtil;
 import com.lit.harukong.widget.CountScrollView;
+
+import org.kymjs.kjframe.http.HttpCallBack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class CountAty extends AppCompatActivity {
+public class CountAty extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
+    private List<CountBean> list = new ArrayList<>();
     private ListView mListView;
+    private LinearLayout count_view;
+    private SwipeRefreshLayout swipeRefreshLayout;
     //方便测试，直接写的public
     public HorizontalScrollView mTouchView;
     //装入所有的HScrollView
@@ -35,7 +50,7 @@ public class CountAty extends AppCompatActivity {
         setContentView(R.layout.aty_count);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.title_activity_statistics);
+        getSupportActionBar().setSubtitle("左右滑动查看更多");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         assert toolbar != null;
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -44,33 +59,72 @@ public class CountAty extends AppCompatActivity {
                 CountAty.this.finish();
             }
         });
-        initViews();
+        setCountData();
     }
 
-    private void initViews() {
-        List<Map<String, String>> datas = new ArrayList<Map<String, String>>();
+    public void setCountData() {
+
+        String url = AppContext.url + "CountServlet";
+        AppContext.kjp.put("param0", "getCount");
+        AppContext.kjh.post(url, AppContext.kjp, false, new HttpCallBack() {
+            @Override
+            public void onSuccess(String t) {
+                super.onSuccess(t);
+                list = JSON.parseArray(t, CountBean.class);
+                if (null != list) {
+                    intiViews(list);
+                }
+            }
+
+            @Override
+            public void onFailure(int errorNo, String strMsg) {
+                super.onFailure(errorNo, strMsg);
+                ToastUtil.showToast(getApplicationContext(), "服务器异常");
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                count_view.setVisibility(View.GONE);
+            }
+        });
+    }
+
+
+    public void intiViews(List<CountBean> list) {
+        count_view = (LinearLayout) findViewById(R.id.count_view);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.count_refresh_list);
+        swipeRefreshLayout.setColorSchemeResources(R.color.swipe_color_1,
+                R.color.swipe_color_2,
+                R.color.swipe_color_3,
+                R.color.swipe_color_4);
+        swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
+        swipeRefreshLayout.setProgressViewEndTarget(true, 100);
+        swipeRefreshLayout.setOnRefreshListener(this);
+
+        List<Map<String, String>> mDates = new ArrayList<Map<String, String>>();
         Map<String, String> data = null;
         CountScrollView headerScroll = (CountScrollView) findViewById(R.id.item_scroll_title);
         //添加头滑动事件
         mHScrollViews.add(headerScroll);
         mListView = (ListView) findViewById(R.id.scroll_list);
-        for (int i = 0; i < 100; i++) {
+        for (CountBean c : list) {
             data = new HashMap<String, String>();
-            data.put("title", "Title_" + i);
-            data.put("data_" + 1, "Date_" + 1 + "_" + i);
-            data.put("data_" + 2, "Date_" + 2 + "_" + i);
-            data.put("data_" + 3, "Date_" + 3 + "_" + i);
-            data.put("data_" + 4, "Date_" + 4 + "_" + i);
-            data.put("data_" + 5, "Date_" + 5 + "_" + i);
-            data.put("data_" + 6, "Date_" + 6 + "_" + i);
-            data.put("data_" + 7, "Date_" + 7 + "_" + i);
-            data.put("data_" + 8, "Date_" + 8 + "_" + i);
-            data.put("data_" + 9, "Date_" + 9 + "_" + i);
-            datas.add(data);
+            data.put("部门", c.getName());
+            data.put("问政总数", String.valueOf(c.getTotal()));
+            data.put("未回应", String.valueOf(c.getState0()));
+            data.put("已关注", String.valueOf(c.getState1()));
+            data.put("关注及时", String.valueOf(c.getS1_in_time0()));
+            data.put("关注超时", String.valueOf(c.getS1_in_time1()));
+            data.put("已回复", String.valueOf(c.getState2()));
+            data.put("回复及时", String.valueOf(c.getS2_in_time0()));
+            data.put("回复超时", String.valueOf(c.getS2_in_time1()));
+            mDates.add(data);
         }
-        SimpleAdapter adapter = new ScrollAdapter(this, datas, R.layout.item_count
-                , new String[]{"title", "data_1", "data_2", "data_3", "data_4", "data_5", "data_6",
-                "data_7", "data_8",}
+
+        SimpleAdapter adapter = new ScrollAdapter(this, CountAty.this, mDates, R.layout.item_count
+                , new String[]{"部门", "问政总数", "未回应", "已关注", "关注及时", "关注超时", "已回复",
+                "回复及时", "回复超时",}
                 , new int[]{R.id.item_branch
                 , R.id.item_total
                 , R.id.item_state0
@@ -110,55 +164,37 @@ public class CountAty extends AppCompatActivity {
         }
     }
 
-    class ScrollAdapter extends SimpleAdapter {
 
-        private List<? extends Map<String, ?>> datas;
-        private int res;
-        private String[] from;
-        private int[] to;
-        private Context context;
+    @Override
+    public void onRefresh() {
+        new Thread(new Runnable() {//下拉触发的函数，这里是谁1s然后加入一个数据，然后更新界面
+            @Override
+            public void run() {
+                setCountData();
 
-        public ScrollAdapter(Context context,
-                             List<? extends Map<String, ?>> data, int resource,
-                             String[] from, int[] to) {
-            super(context, data, resource, from, to);
-            this.context = context;
-            this.datas = data;
-            this.res = resource;
-            this.from = from;
-            this.to = to;
-        }
+                try {
+                    Thread.sleep(1000);
 
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View v = convertView;
-            if (v == null) {
-                v = LayoutInflater.from(context).inflate(res, null);
-                //第一次初始化的时候装进来
-                addHViews((CountScrollView) v.findViewById(R.id.item_scroll));
-                View[] views = new View[to.length];
-                for (int i = 0; i < to.length; i++) {
-                    View tv = v.findViewById(to[i]);
-                    tv.setOnClickListener(clickListener);
-                    views[i] = tv;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                v.setTag(views);
+                handler.sendEmptyMessage(0);
             }
-            View[] holders = (View[]) v.getTag();
-            int len = holders.length;
-            for (int i = 0; i < len; i++) {
-                ((TextView) holders[i]).setText(this.datas.get(position).get(from[i]).toString());
-            }
-            return v;
-        }
+        }).start();
     }
 
-    //测试点击的事件
-    protected View.OnClickListener clickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Toast.makeText(CountAty.this, ((TextView) v).getText(), Toast.LENGTH_SHORT).show();
-        }
-    };
+    private MyHandler handler = new MyHandler();
 
+    class MyHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0:
+                    swipeRefreshLayout.setRefreshing(false);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }
