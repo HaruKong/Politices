@@ -14,12 +14,11 @@ import com.lit.harukong.AppContext;
 import com.lit.harukong.R;
 import com.lit.harukong.bean.PoliticsByInternetBean;
 import com.lit.harukong.bean.TB_GroupBean;
-import com.lit.harukong.ui.EditPoliticsAty;
+import com.lit.harukong.ui.NewOrEditPoliticsAty;
 import com.lit.harukong.ui.SqcPlatFormAty;
 import com.lit.harukong.util.JudgeIsLock;
 import com.lit.harukong.util.JudgePoliticsType;
 import com.lit.harukong.util.JudgeState;
-import com.lit.harukong.util.ToastUtil;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -182,8 +181,16 @@ public class MyPoliticsListAdapter extends BaseAdapter {
         viewHolder.item_list_change.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                PoliticsByInternetBean bean = reList.get(position);
+                PoliticsByInternetBean intentBean = new PoliticsByInternetBean(bean.getTitle(),
+                        bean.getUrl(), bean.getPoliticsType(), bean.getAnnounceTime(), bean.getFindTime(),
+                        bean.getWebSiteName(), bean.getAnnounceUser(), bean.getJbRen(), bean.getJbRenTel(),
+                        bean.getContent(), bean.getBid(), bean.getUsers());
+
                 Intent intent = new Intent();
-                intent.setClass(mContext, EditPoliticsAty.class);
+                intent.setClass(mContext, NewOrEditPoliticsAty.class);
+                intent.putExtra("source_politics", "edit_politics");
+                intent.putExtra("edit_bean", intentBean);
                 mContext.startActivity(intent);
             }
         });
@@ -233,7 +240,7 @@ public class MyPoliticsListAdapter extends BaseAdapter {
                 }
             });
             // 根据isSelected来设置checkbox的选中状况
-            viewHolder.item_checkbox.setChecked(getIsSelected().get(position));
+//            viewHolder.item_checkbox.setChecked(getIsSelected().get(position));
         }
         if (isShowDetail) {
             viewHolder.list_detail.setVisibility(View.VISIBLE);

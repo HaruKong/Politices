@@ -118,9 +118,8 @@ public class SqcPlatFormAty extends AppCompatActivity implements View.OnClickLis
                 webView.goBack();//返回上一页面
                 toolbarTitle.setText(webView.getUrl());
                 return true;
-
             } else {
-                System.exit(0);//退出程序
+                finish();
             }
         }
         return super.onKeyDown(keyCode, event);

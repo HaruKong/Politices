@@ -6,7 +6,7 @@
             <item
                 android:id="@+id/nav_new_politics"
                 android:icon="@drawable/ic_menu_note_add"
-                android:title="@string/title_activity_new_politics" />
+                android:title="@string/subtitle_activity_new_politics" />
             <item
                 android:id="@+id/nav_statistics_politics"
                 android:icon="@drawable/ic_menu_statics_receipt"

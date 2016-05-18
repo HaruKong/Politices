@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".ui.NewPoliticsAty"
-    tools:showIn="@layout/aty_new_politics">
+    tools:context=".ui.NewOrEditPoliticsAty"
+    tools:showIn="@layout/aty_new_or_new_politics">
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -194,7 +194,6 @@
                 <EditText
                     android:id="@+id/et_Jbr"
                     style="@style/edit_text"
-                    android:editable="false"
                     android:hint="交办人" />
             </android.support.design.widget.TextInputLayout>
 
@@ -206,7 +205,6 @@
                 <EditText
                     android:id="@+id/et_JbrTel"
                     style="@style/edit_text"
-                    android:editable="false"
                     android:hint="交办人联系方式" />
             </android.support.design.widget.TextInputLayout>
 

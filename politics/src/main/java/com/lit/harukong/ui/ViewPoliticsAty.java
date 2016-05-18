@@ -15,7 +15,7 @@ public class ViewPoliticsAty extends AppCompatActivity {
         setContentView(R.layout.aty_view_politics);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setSubtitle(R.string.subtitle_activity_edit_politics_aty);
+        getSupportActionBar().setSubtitle(R.string.subtitle_activity_view_politics_aty);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         assert toolbar != null;
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -19,7 +18,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -31,14 +29,12 @@ import com.lit.harukong.AppContext;
 import com.lit.harukong.R;
 import com.lit.harukong.adapter.MyPoliticsListAdapter;
 import com.lit.harukong.bean.PoliticsByInternetBean;
-import com.lit.harukong.bean.TB_GroupBean;
 import com.lit.harukong.interf.OnRefreshListener;
 import com.lit.harukong.util.ToastUtil;
 import com.lit.harukong.widget.RefreshListView;
 
 import org.kymjs.kjframe.http.HttpCallBack;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -257,7 +253,8 @@ public class MainAty extends AppCompatActivity
      * 新建问政
      */
     public void newPolitics() {
-        intent.setClass(getApplicationContext(), NewPoliticsAty.class);
+        intent.setClass(getApplicationContext(), NewOrEditPoliticsAty.class);
+        intent.putExtra("source_politics", "new_politics");
         startActivity(intent);
     }
 
@@ -335,8 +332,8 @@ public class MainAty extends AppCompatActivity
                 politicsByInternetBean.setTitle("这是下拉刷新出来的数据");
                 PoliticsByInternetBean politicsByInternetBean1 = new PoliticsByInternetBean();
                 politicsByInternetBean1.setTitle("这是下拉刷新出来的数据1");
-                reList.add(politicsByInternetBean);
-                reList.add(politicsByInternetBean1);
+                reList.add(0, politicsByInternetBean);
+                reList.add(0, politicsByInternetBean1);
                 return null;
             }
 
@@ -359,7 +356,7 @@ public class MainAty extends AppCompatActivity
 
             @Override
             protected Void doInBackground(Void... params) {
-                SystemClock.sleep(5000);
+                SystemClock.sleep(3000);
 
                 PoliticsByInternetBean politicsByInternetBean = new PoliticsByInternetBean();
                 politicsByInternetBean.setTitle("这是加载更多出来的数据1");
@@ -373,7 +370,6 @@ public class MainAty extends AppCompatActivity
             @Override
             protected void onPostExecute(Void result) {
                 adapter.notifyDataSetChanged();
-
                 // 控制脚布局隐藏
                 rListView.hideFooterView();
             }

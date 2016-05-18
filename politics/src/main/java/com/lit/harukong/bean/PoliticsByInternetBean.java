@@ -1,11 +1,12 @@
 package com.lit.harukong.bean;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * Created by haru on 2016/4/29.
  */
-public class PoliticsByInternetBean {
+public class PoliticsByInternetBean implements Serializable {
     /**
      * PoliticsByInternet表
      */
@@ -42,6 +43,21 @@ public class PoliticsByInternetBean {
 
     public PoliticsByInternetBean() {
         super();
+    }
+
+    public PoliticsByInternetBean(String title, String url, int politicsType, Timestamp announceTime, Timestamp findTime, String webSiteName, String announceUser, String jbRen, String jbRenTel, String content, int bid, String users) {
+        this.title = title;
+        this.url = url;
+        this.politicsType = politicsType;
+        this.announceTime = announceTime;
+        this.findTime = findTime;
+        this.webSiteName = webSiteName;
+        this.announceUser = announceUser;
+        this.jbRen = jbRen;
+        this.jbRenTel = jbRenTel;
+        this.content = content;
+        this.bid = bid;
+        this.users = users;
     }
 
     public String getTitle() {

@@ -39,8 +39,8 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.NewPoliticsAty"
-            android:label="@string/title_activity_new_politics"
+            android:name=".ui.NewOrEditPoliticsAty"
+            android:label="@string/title_activity_edit_politics_aty"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
@@ -74,11 +74,6 @@
         <activity
             android:name=".ui.ViewPoliticsAty"
             android:label="@string/title_activity_view_politics_aty"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".ui.EditPoliticsAty"
-            android:label="@string/title_activity_edit_politics_aty"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -25,11 +27,14 @@ import com.alibaba.fastjson.JSON;
 import com.lit.harukong.AppContext;
 import com.lit.harukong.R;
 import com.lit.harukong.bean.PartPoliticalInfoBean;
+import com.lit.harukong.bean.PoliticsByInternetBean;
 import com.lit.harukong.bean.TB_ChildBean;
 import com.lit.harukong.bean.TB_GroupBean;
 import com.lit.harukong.bean.UserBean;
+import com.lit.harukong.util.JudgeBranch;
+import com.lit.harukong.util.JudgePoliticsType;
 import com.lit.harukong.util.JudgeUserJob;
-import com.lit.harukong.util.MD5Util;
+import com.lit.harukong.util.JudgeUsers;
 import com.lit.harukong.util.ToastUtil;
 import com.lit.harukong.util.UrlManager;
 
@@ -43,7 +48,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class NewPoliticsAty extends AppCompatActivity implements View.OnTouchListener, View.OnFocusChangeListener, View.OnClickListener {
+public class NewOrEditPoliticsAty extends AppCompatActivity implements View.OnTouchListener, View.OnFocusChangeListener, View.OnClickListener {
 
 
     private PartPoliticalInfoBean partPoliticalInfo;
@@ -68,16 +73,19 @@ public class NewPoliticsAty extends AppCompatActivity implements View.OnTouchLis
     private ProgressDialog mDialogs;
     private Calendar calendar;
     private String secondStr;//秒
+
     private List<UserBean> userList = new ArrayList<>();
     private List<TB_GroupBean> listForResultG;
     private List<TB_ChildBean> listForResultC;
     private List<UserBean> listForResultU;
+    private String sourceIntent;
+    private PoliticsByInternetBean beanIntent;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.aty_new_politics);
+        setContentView(R.layout.aty_new_or_new_politics);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -89,14 +97,51 @@ public class NewPoliticsAty extends AppCompatActivity implements View.OnTouchLis
                         .setAction("保存", null).show();
             }
         });
+
+        assert toolbar != null;
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NewPoliticsAty.this.finish();
+                NewOrEditPoliticsAty.this.finish();
             }
         });
         initData();
         initWidget();
+        beanIntent = (PoliticsByInternetBean) getIntent().getSerializableExtra("edit_bean");
+        sourceIntent = getIntent().getStringExtra("source_politics");
+        if (sourceIntent.equals("new_politics")) {
+            etAnnounceTime.setText(String.format("%s%s", selectAnnDate, selectAnnTime));
+            etFindTime.setText(String.format("%s%s", selectFindDate, selectFindTime));
+            etJbr.setEnabled(false);
+            etJbrTel.setEnabled(false);
+            getSupportActionBar().setSubtitle(R.string.subtitle_activity_new_politics);
+            SharedPreferences sp = getSharedPreferences("PoliticsInfo", Activity.MODE_PRIVATE);
+            if (null != userList) {
+                for (UserBean u : userList) {
+                    if (u.getLoginID().equals(sp.getString("mLogin", ""))) {
+                        etJbr.setText(u.getName());
+                        etJbrTel.setText(u.getTel());
+                        break;
+                    }
+                }
+            }
+        } else {
+            SimpleDateFormat myFmt = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            getSupportActionBar().setSubtitle(R.string.subtitle_activity_edit_politics_aty);
+            etUrl.setText(beanIntent.getUrl());
+            etTitle.setText(beanIntent.getTitle());
+            etAnnounceTime.setText(String.format("%s", myFmt.format(beanIntent.getAnnounceTime()).toString()));
+            etFindTime.setText(String.format("%s", myFmt.format(beanIntent.getFindTime()).toString()));
+            etWebSiteTime.setText(beanIntent.getWebSiteName());
+            etPoliticsType.setText(JudgePoliticsType.politicsType(beanIntent.getPoliticsType()));
+            etBID.setText(JudgeBranch.branch(beanIntent.getPoliticsType()));
+            etBUsers.setText(JudgeUsers.user(beanIntent.getUsers()));
+            etAnnounceUser.setText(beanIntent.getAnnounceUser());
+            etJbr.setText(beanIntent.getJbRen());
+            etJbrTel.setText(beanIntent.getJbRenTel());
+            etContent.setText(beanIntent.getContent());
+        }
+
     }
 
 
@@ -104,6 +149,7 @@ public class NewPoliticsAty extends AppCompatActivity implements View.OnTouchLis
         /**
          * 进入NewPoliticsAty的时间
          */
+
         long time = System.currentTimeMillis();
         SimpleDateFormat myFmtDate = new SimpleDateFormat("yyyy/MM/dd");
         SimpleDateFormat myFmtTime;
@@ -151,20 +197,7 @@ public class NewPoliticsAty extends AppCompatActivity implements View.OnTouchLis
         etBID.setOnFocusChangeListener(this);
         etBUsers.setOnFocusChangeListener(this);
 
-        etAnnounceTime.setText(String.format("%s%s", selectAnnDate, selectAnnTime));
-        etFindTime.setText(String.format("%s%s", selectFindDate, selectFindTime));
-
         calendar = Calendar.getInstance();
-        SharedPreferences sp = getSharedPreferences("PoliticsInfo", Activity.MODE_PRIVATE);
-        if (null != userList) {
-            for (UserBean u : userList) {
-                if (u.getLoginID().equals(sp.getString("mLogin", ""))) {
-                    etJbr.setText(u.getName());
-                    etJbrTel.setText(u.getTel());
-                    break;
-                }
-            }
-        }
     }
 
 
@@ -245,7 +278,7 @@ public class NewPoliticsAty extends AppCompatActivity implements View.OnTouchLis
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent();
-                            intent.setClass(NewPoliticsAty.this, PoliticsTypeAty.class);
+                            intent.setClass(NewOrEditPoliticsAty.this, PoliticsTypeAty.class);
                             startActivityForResult(intent, AppContext.POLITICS_TYPE);
                         }
                     });
@@ -262,7 +295,7 @@ public class NewPoliticsAty extends AppCompatActivity implements View.OnTouchLis
                         public void onClick(View v) {
                             etBUsers.setText("");
                             Intent intent = new Intent();
-                            intent.setClass(NewPoliticsAty.this, BranchAty.class);
+                            intent.setClass(NewOrEditPoliticsAty.this, BranchAty.class);
                             startActivityForResult(intent, AppContext.BRANCH);
                         }
                     });
@@ -284,7 +317,7 @@ public class NewPoliticsAty extends AppCompatActivity implements View.OnTouchLis
                                 Intent intent = new Intent();
                                 intent.putExtra("listG", (Serializable) listForResultG);
                                 intent.putExtra("listC", (Serializable) listForResultC);
-                                intent.setClass(NewPoliticsAty.this, BranchUserAty.class);
+                                intent.setClass(NewOrEditPoliticsAty.this, BranchUserAty.class);
                                 startActivityForResult(intent, AppContext.BRANCH_USER);
                             }
                         }
@@ -404,7 +437,7 @@ public class NewPoliticsAty extends AppCompatActivity implements View.OnTouchLis
      */
 
     public void CrawlInfo(String CrawlUrl) {
-        mDialogs = ProgressDialog.show(NewPoliticsAty.this, "抓取信息", "正在抓取中，请稍等。。。", false, false);
+        mDialogs = ProgressDialog.show(NewOrEditPoliticsAty.this, "抓取信息", "正在抓取中，请稍等。。。", false, false);
 
         String url = AppContext.url + "PartPoliticsServlet";
         AppContext.kjp.put("param0", "getSqcForum");
@@ -417,7 +450,7 @@ public class NewPoliticsAty extends AppCompatActivity implements View.OnTouchLis
 
                 partPoliticalInfo = JSON.parseObject(t, PartPoliticalInfoBean.class);
                 if (null == partPoliticalInfo) {
-                    ToastUtil.showToast(NewPoliticsAty.this, "没有获取到信息");
+                    ToastUtil.showToast(NewOrEditPoliticsAty.this, "没有获取到信息");
                 } else {
                     initTextView(partPoliticalInfo);
                 }
@@ -426,7 +459,7 @@ public class NewPoliticsAty extends AppCompatActivity implements View.OnTouchLis
             @Override
             public void onFailure(int errorNo, String strMsg) {
                 super.onFailure(errorNo, strMsg);
-                ToastUtil.showToast(NewPoliticsAty.this, "服务器连接中断");
+                ToastUtil.showToast(NewOrEditPoliticsAty.this, "服务器连接中断");
             }
 
             @Override
@@ -468,7 +501,7 @@ public class NewPoliticsAty extends AppCompatActivity implements View.OnTouchLis
      * 日期选择对话框
      */
     public void mDatePickerDialog(final View v) {
-        DatePickerDialog datePicker = new DatePickerDialog(NewPoliticsAty.this, new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog datePicker = new DatePickerDialog(NewOrEditPoliticsAty.this, new DatePickerDialog.OnDateSetListener() {
 
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
@@ -497,7 +530,7 @@ public class NewPoliticsAty extends AppCompatActivity implements View.OnTouchLis
      * 时间选择对话框
      */
     public void mTimePickerDialog(final View v) {
-        TimePickerDialog time = new TimePickerDialog(NewPoliticsAty.this, new TimePickerDialog.OnTimeSetListener() {
+        TimePickerDialog time = new TimePickerDialog(NewOrEditPoliticsAty.this, new TimePickerDialog.OnTimeSetListener() {
 
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {

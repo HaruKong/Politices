@@ -19,7 +19,7 @@
 
 
     <string name="title_activity_main">问政列表</string>
-    <string name="title_activity_new_politics">新建问政</string>
+    <string name="subtitle_activity_new_politics">新建问政</string>
     <string name="title_activity_statistics">统计问政</string>
     <string name="title_activity_sqc_plat_form">宿迁论坛</string>
     <string name="title_activity_app_settings">设置</string>
